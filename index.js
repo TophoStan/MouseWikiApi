@@ -1,4 +1,3 @@
-//Imports
 require("dotenv").config();
 
 const express = require("express");
@@ -7,6 +6,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
+const port = process.env.PORT;
 app.use(express.json());
 app.use(cors());
 app.use(
@@ -14,21 +14,40 @@ app.use(
     extended: true,
   })
 );
-//let port = process.env.PORT || 3000;
 
-const userRoute = require("./routes/User");
-const miceRoute = require("./routes/Mice");
-const switchRoute = require("./routes/Switch");
-const sensorsRoute = require("./routes/Sensors");
-app.use("/switch", switchRoute);
-app.use("/user", userRoute);
-app.use("/mice", miceRoute);
-app.use("/sensors", sensorsRoute);
+app.all("*", (req, res, next) => {
+  const method = req.method;
+  console.log(`Method ${method} is aangeroepen op URL:${req.url}`);
+  next();
+});
 
-app.listen(process.env.PORT || 3000, function () {
-  console.log(
-    "Express server listening on port %d in %s mode",
-    this.address().port,
-    app.settings.env
-  );
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: 200,
+    result: "Hello World",
+  });
+});
+
+const userRoute = require("./src/routes/User");
+const miceRoute = require("./src/routes/Mice");
+const switchRoute = require("./src/routes/Switch");
+const sensorsRoute = require("./src/routes/Sensors");
+app.use("/api/switch", switchRoute);
+app.use("/api/user", userRoute);
+app.use("/api/mice", miceRoute);
+app.use("/api/sensors", sensorsRoute);
+
+app.all("*", (req, res) => {
+  res.status(404).json({
+    status: 404,
+    result: "End-point not found",
+  });
+});
+//Error handler
+app.use((err, req, res, next) => {
+  res.status(err.status).json(err);
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
