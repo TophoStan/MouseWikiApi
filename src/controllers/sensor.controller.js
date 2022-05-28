@@ -30,9 +30,9 @@ const controller = {
     });
   },
   getSensorById: (req, res, next) => {
-    const mouseId = req.params.id;
+    const sensorId = req.params.id;
     pool.query(
-      `SELECT * FROM sensorjoinquery WHERE sensor_id = ${mouseId}`,
+      `SELECT * FROM sensorjoinquery WHERE sensor_id = ${sensorId}`,
       (err, result, fields) => {
         if (err) {
           const error = {
@@ -43,19 +43,25 @@ const controller = {
         }
 
         if (result.length) {
-        }
-        const sensor = {
-          id: data.sensor_id,
-          brand_id: data.brand_id,
-          brand: data.brand_name,
-          name: data.name,
-          lens: data.lens,
-        };
+          const data = result[0];
+          const sensor = {
+            id: data.sensor_id,
+            brand_id: data.brand_id,
+            brand: data.brand_name,
+            name: data.name,
+            lens: data.lens,
+          };
 
-        res.status(200).json({
-          status: 200,
-          result: sensor,
-        });
+          res.status(200).json({
+            status: 200,
+            result: sensor,
+          });
+        } else {
+          res.status(404).json({
+            status: 404,
+            message: `No data found while searching for sensor with id ${sensorId}`,
+          });
+        }
       }
     );
   },

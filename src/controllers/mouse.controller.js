@@ -101,8 +101,8 @@ const controller = {
           });
         } else {
           res.status(400).json({
-            status: 400,
-            message: "Mouse with provided id does not exist",
+            status: 404,
+            message: `No data found while searching for mouse with id ${mouseId}`,
           });
         }
       }
