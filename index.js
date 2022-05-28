@@ -35,6 +35,7 @@ const sensorsRoute = require("./src/routes/Sensors");
 const brandRoute = require("./src/routes/Brand");
 const imageRoute = require("./src/routes/Image");
 const encoderRoute = require("./src/routes/Encoder");
+
 app.use("/api/switch", switchRoute);
 app.use("/api/user", userRoute);
 app.use("/api/mice", miceRoute);
@@ -42,6 +43,11 @@ app.use("/api/sensors", sensorsRoute);
 app.use("/api/brand", brandRoute);
 app.use("/api/image", imageRoute);
 app.use("/api/encoder", encoderRoute);
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerDoc = require("./src/routes/SwaggerDocument.json");
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.all("*", (req, res) => {
   res.status(404).json({

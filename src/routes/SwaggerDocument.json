@@ -1,0 +1,176 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "MouseWikiAPI",
+    "description": "#An API for sharing data on mice, mousepads, reviews, sensors, microswitches and more!",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "mousewikiapi.herokuapp.com",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Mice"
+    }
+  ],
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/mice": {
+      "get": {
+        "summary": "Gets a list of mice",
+        "tags": ["Mice"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": [
+                {
+                  "mouse_id": 0,
+                  "name": "Starlight-12 Phantom",
+                  "msrp": "189.99",
+                  "polling_rate": 1000,
+                  "weight": 43,
+                  "shape": "Ambidextrous",
+                  "mouse_brand": "Finalmouse",
+                  "sensor": {
+                    "id": 3,
+                    "brand": "Pixart",
+                    "name": "PMW 3370",
+                    "lens": "Optical"
+                  },
+                  "encoder": {
+                    "name": "Kailh Red",
+                    "height": 9
+                  },
+                  "main_switch": {
+                    "switch_brand": "Kailh",
+                    "name": "GM8.0"
+                  },
+                  "side_switch": {
+                    "switch_brand": "Omron",
+                    "name": "D2LS-21"
+                  },
+                  "image_item_name": "MOUSE_FINALMOUSE_STARLIGHT_PHANTOM",
+                  "mouse_picture_url": "https://i.rtings.com/assets/products/ZEZjttUG/finalmouse-starlight-12-phantom-small/design-medium.jpg"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/api/mice/{id}": {
+      "get": {
+        "summary": "Gets a single mouse by id",
+        "tags": ["Mice"],
+        "parameters": [
+          { "name": "id", "type": "integer", "in": "path", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "mouse_id": 0,
+                "name": "Starlight-12 Phantom",
+                "msrp": "189.99",
+                "polling_rate": 1000,
+                "weight": 43,
+                "shape": "Ambidextrous",
+                "mouse_brand": "Finalmouse",
+                "sensor": {
+                  "id": 3,
+                  "brand": "Pixart",
+                  "name": "PMW 3370",
+                  "lens": "Optical"
+                },
+                "encoder": {
+                  "name": "Kailh Red",
+                  "height": 9
+                },
+                "main_switch": {
+                  "switch_brand": "Kailh",
+                  "name": "GM8.0"
+                },
+                "side_switch": {
+                  "switch_brand": "Omron",
+                  "name": "D2LS-21"
+                },
+                "image_item_name": "MOUSE_FINALMOUSE_STARLIGHT_PHANTOM",
+                "mouse_picture_url": "https://i.rtings.com/assets/products/ZEZjttUG/finalmouse-starlight-12-phantom-small/design-medium.jpg"
+              }
+            },
+            "schema": { "$ref": "#/definitions/mouse" }
+          },
+          "404": {
+            "description": "No results found for provided id",
+            "examples": {
+              "application/json": {
+                "status": 404,
+                "message": "No data found while searching for mouse with id 1"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "mouse": {
+      "required": [
+        "brand_id",
+        "name",
+        "msrp",
+        "polling_rate",
+        "shape",
+        "sensor_id",
+        "weight",
+        "encoder_id",
+        "image_id",
+        "main_switch_id",
+        "side_switch_id"
+      ],
+      "properties": {
+        "brand_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "msrp": {
+          "type": "integer"
+        },
+        "polling_rate": {
+          "type": "integer"
+        },
+        "shape": {
+          "type": "string"
+        },
+        "sensor_id": {
+          "type": "integer"
+        },
+        "weight": {
+          "type": "integer"
+        },
+        "encoder_id": {
+          "type": "integer"
+        },
+        "image_id": {
+          "type": "integer"
+        },
+        "main_switch_id": {
+          "type": "integer"
+        },
+        "side_switch_id": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
