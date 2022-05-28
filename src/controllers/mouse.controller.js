@@ -108,62 +108,6 @@ const controller = {
       }
     );
   },
-  addMouse: (req, res, next) => {
-    const mouse = req.body;
-    pool.query("INSERT INTO Mice SET ?", mouse, (err, result, fields) => {
-      if (err) {
-        const error = {
-          status: 404,
-          message: err.message,
-        };
-        next(error);
-      } else {
-        res.status(200).json({
-          status: 200,
-          result: mouse,
-        });
-      }
-    });
-  },
-  deleteMouse: (req, res, next) => {
-    const mouseId = req.params.id;
-    pool.query(`DELETE FROM mouse WHERE id =${mouseId}`, (req, res, next) => {
-      if (err) {
-        const error = {
-          status: 404,
-          message: err.message,
-        };
-        next(error);
-      } else {
-        res.status(200).json({
-          status: 200,
-          message: `Succesfully deleted ${mouseId}`,
-        });
-      }
-    });
-  },
-  updateMouse: (req, res, next) => {
-    const mouseId = req.params.id;
-    const mouse = req.body;
-    pool.query(
-      `UPDATE mouse SET ? WHERE id =${mouseId}`,
-      mouse,
-      (req, res, next) => {
-        if (err) {
-          const error = {
-            status: 404,
-            message: err.message,
-          };
-          next(error);
-        } else {
-          res.status(200).json({
-            status: 200,
-            message: `Succesfully updated ${mouseId}`,
-          });
-        }
-      }
-    );
-  },
 };
 
 module.exports = controller;
