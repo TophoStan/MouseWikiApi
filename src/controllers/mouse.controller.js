@@ -27,7 +27,8 @@ const controller = {
             lens: data.lens,
           },
           encoder: {
-            name: data.encoderName,
+            name: data.encoderBrand,
+            brand: data.encoderName,
             height: data.height,
           },
           main_switch: {
@@ -51,8 +52,7 @@ const controller = {
     });
   },
   getMiceById: (req, res, next) => {
-    const mouseId = req.params.id;
-    console.log(mouseId);
+    const mouseId = parseInt(req.params.id);
     pool.query(
       `SELECT * FROM mousejoinquery WHERE mouse_id = ${mouseId};`,
       (err, dbresult, fields) => {
@@ -108,6 +108,7 @@ const controller = {
       }
     );
   },
+
 };
 
 module.exports = controller;

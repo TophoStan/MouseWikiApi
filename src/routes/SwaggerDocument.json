@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "MouseWikiAPI",
-    "description": "#An API for sharing data on mice, mousepads, reviews, sensors, microswitches and more!",
+    "description": "An API for sharing data on mice, mousepads, reviews, sensors, microswitches and more!",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
