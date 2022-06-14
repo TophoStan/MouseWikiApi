@@ -1,3 +1,4 @@
+const e = require("connect-timeout");
 const { pool } = require("../database/databaseconfig");
 
 const controller = {
@@ -11,6 +12,7 @@ const controller = {
         next(error);
       }
       let mice = [];
+      console.log(result);
       result.forEach((data) => {
         let mouse = {
           mouse_id: data.mouse_id,
@@ -108,7 +110,83 @@ const controller = {
       }
     );
   },
+  addMouse: (req, res, next) => {
+    const mouse = req.body;
+    pool.query(`INSERT INTO mouse SET ?`, mouse, (err, result, fields) => {
+      if (err) {
+        const error = {
+          status: 404,
+          message: err.message
+        }
+        next(error)
+      } else {
+        res.status(200).json({
+          status: 200,
+          result: "succesfully inserted mouse!"
+        })
+      }
+    })
 
+  },
+  updateMouse: (req, res, next) => {
+    const mouse_id = req.body.mouse_id;
+    const mouse = req.body;
+    delete mouse.mouse_id;
+    pool.query(`SELECT * FROM mouse WHERE mouse_id=${mouse_id} `, (err, result, fields) => {
+      if (err) {
+        const error = {
+          status: 404,
+          message: err.message
+        }
+        next(error)
+      }
+      if (result.length) {
+        pool.query(`UPDATE mouse SET ? WHERE mouse_id = ${mouse_id}`, mouse, (err, result, fields) => {
+          if (err) {
+            const error = {
+              status: 404,
+              message: err.message
+            }
+            next(error)
+          }
+          if (result.changedRows) {
+            res.status(200).json({
+              status: 200,
+              result: "Succesfully updated mouse!"
+            })
+          } else {
+            res.status(404).json({
+              status: 200,
+              result: "Mouse was not updated!"
+            })
+          }
+        })
+      }
+    })
+  },
+  deleteMouse: (req, res, next) => {
+    const mouseId = req.body.mouse_id;
+    pool.query(`DELETE FROM mouse WHERE mouse_id=${mouseId}`, (err, result, fields) => {
+      if (err) {
+        const error = {
+          status: 404,
+          message: err.message
+        }
+        next(error)
+      }
+      if (result.changedRows) {
+        res.status(200).json({
+          status: 200,
+          result: "Succesfully deleted mouse!"
+        })
+      } else {
+        res.status(404).json({
+          status: 200,
+          result: "Mouse was not deleted!"
+        })
+      }
+    })
+  }
 };
 
 module.exports = controller;

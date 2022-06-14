@@ -10,5 +10,7 @@ router.get(
   verificationController.validateNumber,
   mouseController.getMiceById
 );
+router.post("/", verificationController.validatePropertiesMouse, mouseController.addMouse)
+router.put("/", verificationController.validatePropertiesMouse, mouseController.updateMouse)
 
 module.exports = router;
