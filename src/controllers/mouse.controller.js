@@ -1,4 +1,3 @@
-const e = require("connect-timeout");
 const { pool } = require("../database/databaseconfig");
 
 const controller = {

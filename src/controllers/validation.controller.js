@@ -40,6 +40,43 @@ const controller = {
       next(error);
     }
   },
+  validateUser: (req, res, next) => {
+    let user = req.body;
+    let {
+      username,
+      emailAddress,
+      password,
+    } = user;
+    try {
+      assert(typeof username === "string", "username must be a string");
+      assert(typeof emailAddress === "string", "EmailAddress must be a string");
+      assert(typeof password === "string", "Password must a string");
+      const pattern = /[a-z0-9]+@[a-z]+\.[a-z]{2,5}/;
+      assert(pattern.test(req.body.emailAddress), "emailAddress is not valid");
+      next();
+    } catch (err) {
+      const error = {
+        status: 400,
+        message: err.message,
+      };
+      next(error);
+    }
+  },
+  validateUserSubmission: (req, res, next) => {
+    const { objectType, objectData } = req.body;
+    try {
+      assert(objectType == "sensor" || objectType == "mouse" || objectType == "encoder" || objectType == "microswitch" || objectType == "image" || objectType == "brand", "objectType must be one of the following'brand','encoder','image','sensor','microswitch','mouse'");
+      assert(typeof objectType === "string", "objectType must be a string");
+      assert(typeof objectData === "object", "objectData must be an object");
+      next();
+    } catch (err) {
+      const error = {
+        status: 400,
+        message: err.message,
+      };
+      next(error);
+    }
+  }
 
 };
 module.exports = controller;

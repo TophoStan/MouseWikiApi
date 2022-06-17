@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT;
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -35,6 +36,7 @@ const sensorsRoute = require("./src/routes/Sensors");
 const brandRoute = require("./src/routes/Brand");
 const imageRoute = require("./src/routes/Image");
 const encoderRoute = require("./src/routes/Encoder");
+const submissionRoute = require("./src/routes/Submit");
 
 app.use("/api/switch", switchRoute);
 app.use("/api/user", userRoute);
@@ -43,6 +45,7 @@ app.use("/api/sensors", sensorsRoute);
 app.use("/api/brand", brandRoute);
 app.use("/api/image", imageRoute);
 app.use("/api/encoder", encoderRoute);
+app.use("/api/submit", submissionRoute);
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDoc = require("./src/routes/SwaggerDocument.json");
