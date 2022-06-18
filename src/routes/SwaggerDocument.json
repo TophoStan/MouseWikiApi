@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "MouseWikiAPI",
     "description": "An API for sharing data on mice, mousepads, reviews, sensors, microswitches and more!",
     "license": {
@@ -14,16 +14,39 @@
   "tags": [
     {
       "name": "Mice"
+    },
+    {
+      "name": "Brands"
+    },
+    {
+      "name": "Encoders"
+    },
+    {
+      "name": "Images"
+    },
+    {
+      "name": "Microswitches"
+    },
+    {
+      "name": "Sensors"
     }
   ],
-  "schemes": ["https"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/api/mice": {
       "get": {
         "summary": "Gets a list of mice",
-        "tags": ["Mice"],
+        "tags": [
+          "Mice"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -68,9 +91,16 @@
     "/api/mice/{id}": {
       "get": {
         "summary": "Gets a single mouse by id",
-        "tags": ["Mice"],
+        "tags": [
+          "Mice"
+        ],
         "parameters": [
-          { "name": "id", "type": "integer", "in": "path", "required": true }
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "required": true
+          }
         ],
         "responses": {
           "200": {
@@ -106,7 +136,9 @@
                 "mouse_picture_url": "https://i.rtings.com/assets/products/ZEZjttUG/finalmouse-starlight-12-phantom-small/design-medium.jpg"
               }
             },
-            "schema": { "$ref": "#/definitions/mouse" }
+            "schema": {
+              "$ref": "#/definitions/mouse"
+            }
           },
           "404": {
             "description": "No results found for provided id",
@@ -114,6 +146,381 @@
               "application/json": {
                 "status": 404,
                 "message": "No data found while searching for mouse with id 1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/brand": {
+      "get": {
+        "summary": "Gets a list of brands",
+        "tags": [
+          "Brands"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": [
+                {
+                  "status": 200,
+                  "result": [
+                    {
+                      "id": 1,
+                      "brand": "Kailh",
+                      "market": "Switches",
+                      "logo": "https://pbs.twimg.com/profile_images/1287588127083651072/oNnHUQKv_400x400.jpg"
+                    },
+                    {
+                      "id": 2,
+                      "brand": "Pixart",
+                      "market": "Sensors",
+                      "logo": "https://www.codico.com/media/economix/ip/resized/240x_ext_9e5b3b3_PIXART-Logo1.png"
+                    },
+                    {
+                      "id": 3,
+                      "brand": "Finalmouse",
+                      "market": "Mouse",
+                      "logo": "https://shop.x-raypad.com/wp-content/uploads/2019/12/finalmouse-logo.png"
+                    },
+                    {
+                      "id": 4,
+                      "brand": "Omron",
+                      "market": "Microswitches",
+                      "logo": "https://www.mouser.fr/images/pressroom/hires/LPR_Omron_Logo.PNG"
+                    },
+                    {
+                      "id": 5,
+                      "brand": "Razer",
+                      "market": "Peripherals",
+                      "logo": "https://upload.wikimedia.org/wikipedia/en/4/40/Razer_snake_logo.svg"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/api/brand/{id}": {
+      "get": {
+        "summary": "Gets a single brand by id",
+        "tags": [
+          "Brands"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": {
+                  "id": 1,
+                  "brand": "Kailh",
+                  "market": "Switches",
+                  "logo": "https://pbs.twimg.com/profile_images/1287588127083651072/oNnHUQKv_400x400.jpg"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/brand"
+            }
+          },
+          "404": {
+            "description": "No results found for provided id",
+            "examples": {
+              "application/json": {
+                "status": 404,
+                "message": "No data found while searching for brands with id 1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensors": {
+      "get": {
+        "summary": "Gets a list of sensors",
+        "tags": [
+          "Sensors"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": [
+                  {
+                    "id": 3,
+                    "brand_id": 2,
+                    "brand": "Pixart",
+                    "name": "PMW 3370",
+                    "lens": "Optical"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensors/{id}": {
+      "get": {
+        "summary": "Gets a single sensor by id",
+        "tags": [
+          "Sensors"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": {
+                  "id": 3,
+                  "brand_id": 2,
+                  "brand": "Pixart",
+                  "name": "PMW 3370",
+                  "lens": "Optical"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/sensor"
+            }
+          },
+          "404": {
+            "description": "No results found for provided id",
+            "examples": {
+              "application/json": {
+                "status": 404,
+                "message": "No data found while searching for sensor with id 1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/encoder": {
+      "get": {
+        "summary": "Gets a list of encoders",
+        "tags": [
+          "Encoders"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": [
+                  {
+                    "id": 1,
+                    "brand_id": 1,
+                    "brand": "Kailh",
+                    "name": "Kailh Red",
+                    "height": 9,
+                    "image_url": "https://ae01.alicdn.com/kf/HTB1YNCcKFzqK1RjSZFCq6zbxVXac/Kailh-7-8-9-10-11-12-Mm-Rotary-Muis-Scroll-Wheel-Encoder-1-74-Mm.jpg_50x50.jpg_.webp"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/encoder/{id}": {
+      "get": {
+        "summary": "Gets a single encoder by id",
+        "tags": [
+          "Encoders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": {
+                  "id": 1,
+                  "brand_id": 1,
+                  "brand": "Kailh",
+                  "name": "Kailh Red",
+                  "height": 9,
+                  "image_url": "https://ae01.alicdn.com/kf/HTB1YNCcKFzqK1RjSZFCq6zbxVXac/Kailh-7-8-9-10-11-12-Mm-Rotary-Muis-Scroll-Wheel-Encoder-1-74-Mm.jpg_50x50.jpg_.webp"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/encoder"
+            }
+          },
+          "404": {
+            "description": "No results found for provided id",
+            "examples": {
+              "application/json": {
+                "status": 404,
+                "message": "No data found while searching for encoder with id 1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/switch": {
+      "get": {
+        "summary": "Gets a list of microswitches",
+        "tags": [
+          "Microswitches"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": [
+                  {
+                    "id": 1,
+                    "brand_id": 1,
+                    "brand": "Kailh",
+                    "name": "GM8.0",
+                    "image_url": "https://ae01.alicdn.com/kf/H5d0a988aba5d454e941d71fe2a7360d5i/FREES-SHIPPING-Kailh-gm8-0-Black-Mamba-mouse-microswitch-electric-game-alloy-80million-buttons.jpg_Q90.jpg_.webp"
+                  },
+                  {
+                    "id": 8,
+                    "brand_id": 1,
+                    "brand": "Kailh",
+                    "name": "GM4.0",
+                    "image_url": "https://ae01.alicdn.com/kf/Hb2854fd9b9064f3a888e3291e905b195i/2pcs-Kailh-Red-GM4-0-60M-life-Gaming-Mouse-Micro-Switch-3-Pin-Red-Dot-Used.jpg"
+                  },
+                  {
+                    "id": 10,
+                    "brand_id": 4,
+                    "brand": "Omron",
+                    "name": "D2LS-21",
+                    "image_url": "https://media.digikey.com/Photos/Omron%20Elect%20Photos/MFG_D2LS-21.jpg"
+                  },
+                  {
+                    "id": 11,
+                    "brand_id": 4,
+                    "brand": "Omron",
+                    "name": "D2FC-F-7N(20M)",
+                    "image_url": "https://cdn.shopify.com/s/files/1/0577/4709/products/IMG_8279_1024x1024.jpg?v=1566551630"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/switch/{id}": {
+      "get": {
+        "summary": "Gets a single switch by id",
+        "tags": [
+          "Microswitches"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": {
+                  "id": 1,
+                  "brand_id": 1,
+                  "brand": "Kailh",
+                  "name": "GM8.0",
+                  "image_url": "https://ae01.alicdn.com/kf/H5d0a988aba5d454e941d71fe2a7360d5i/FREES-SHIPPING-Kailh-gm8-0-Black-Mamba-mouse-microswitch-electric-game-alloy-80million-buttons.jpg_Q90.jpg_.webp"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/microswitch"
+            }
+          },
+          "404": {
+            "description": "No results found for provided id",
+            "examples": {
+              "application/json": {
+                "status": 404,
+                "message": "No data found while searching for switch with id 1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/image": {
+      "get": {
+        "summary": "Gets a list of images",
+        "tags": [
+          "Images"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": {
+                "status": 200,
+                "result": [
+                  {
+                    "id": 1,
+                    "item_name": "LOGO_Kailh",
+                    "image_url": "https://pbs.twimg.com/profile_images/1287588127083651072/oNnHUQKv_400x400.jpg"
+                  },
+                  {
+                    "id": 2,
+                    "item_name": "MOUSE_FINALMOUSE_STARLIGHT_PHANTOM",
+                    "image_url": "https://i.rtings.com/assets/products/ZEZjttUG/finalmouse-starlight-12-phantom-small/design-medium.jpg"
+                  },
+                  {
+                    "id": 3,
+                    "item_name": "FINALMOUSE_STARLIGHT_ZEUS_SMALL",
+                    "image_url": "http://cdn.shopify.com/s/files/1/2377/4861/products/zeus2_grande.png?v=1629245576"
+                  }
+                ]
               }
             }
           }
@@ -169,6 +576,100 @@
         },
         "side_switch_id": {
           "type": "integer"
+        }
+      }
+    },
+    "sensor": {
+      "required": [
+        "brand_id",
+        "name",
+        "sensor_id",
+        "lens"
+      ],
+      "properties": {
+        "brand_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sensor_id": {
+          "type": "integer"
+        },
+        "lens": {
+          "type": "enum(Optical, Analog)"
+        }
+      }
+    },
+    "brand": {
+      "required": [
+        "brand_name",
+        "logo_image_url",
+        "primary_market"
+      ],
+      "properties": {
+        "brand_name": {
+          "type": "string"
+        },
+        "logo_image_url": {
+          "type": "string"
+        },
+        "primary_market": {
+          "type": "string"
+        }
+      }
+    },
+    "encoder": {
+      "required": [
+        "brand_id",
+        "name",
+        "height",
+        "image_url"
+      ],
+      "properties": {
+        "brand_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "image_url": {
+          "type": "string"
+        }
+      }
+    },
+    "microswitch": {
+      "required": [
+        "brand_id",
+        "name",
+        "image_url"
+      ],
+      "properties": {
+        "brand_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "image_url": {
+          "type": "string"
+        }
+      }
+    },
+    "image": {
+      "required": [
+        "itemname",
+        "image_url"
+      ],
+      "properties": {
+        "itemname": {
+          "type": "string"
+        },
+        "image_url": {
+          "type": "string"
         }
       }
     }

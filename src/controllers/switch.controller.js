@@ -32,7 +32,7 @@ const controller = {
   getSwitchById: (req, res, next) => {
     const switchId = req.params.id;
     pool.query(
-      `SELECT * FROM switchjoinquery WHERE sensor_id = ${switchId}`,
+      `SELECT * FROM switchjoinquery WHERE switch_id = ${switchId}`,
       (err, result, fields) => {
         if (err) {
           const error = {

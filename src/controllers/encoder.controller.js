@@ -33,7 +33,7 @@ const controller = {
   getEncoderById: (req, res, next) => {
     const encoderId = req.params.id;
     pool.query(
-      `SELECT * FROM brandview WHERE brand_id = ${encoderId}`,
+      `SELECT * FROM encoderjoinqeury WHERE brand_id = ${encoderId}`,
       (err, result, fields) => {
         if (err) {
           const error = {
