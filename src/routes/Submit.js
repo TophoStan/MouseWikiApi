@@ -6,6 +6,7 @@ const authController = require("../controllers/authentication.controller");
 const submissionController = require("../controllers/submit.controller");
 
 router.post("/", authController.validateToken, verificationController.validateUserSubmission, submissionController.addSubmission);
+router.post("/admin", authController.validateToken, authController.validateAdmin, submissionController.judgeSubmission, submissionController.submitSubmission);
 
 
 

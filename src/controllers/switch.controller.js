@@ -29,7 +29,7 @@ const controller = {
       });
     });
   },
-  getSensorById: (req, res, next) => {
+  getSwitchById: (req, res, next) => {
     const switchId = req.params.id;
     pool.query(
       `SELECT * FROM switchjoinquery WHERE sensor_id = ${switchId}`,

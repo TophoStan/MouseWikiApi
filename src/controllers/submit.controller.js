@@ -16,7 +16,13 @@ const controller = {
             data: JSON.stringify(objectData)
         }
         pool.query(`INSERT INTO usersubmitteddata SET ?`, submission, (err, results, fields) => {
-            if (err) throw err;
+            if (err) {
+                const error = {
+                    status: 501,
+                    message: err.message,
+                };
+                next(error);
+            }
             res.status(200).json({
                 status: 200,
                 message: "Succesfully submitted data"
@@ -26,32 +32,35 @@ const controller = {
     deleteSubmission: (req, res, next) => { },
     //Can only be done by an Admin
     judgeSubmission: (req, res, next) => {
-        const judgement = req.body;
-        if (judgement.approval) {
-            const object = judgement.object;
-            switch (objectType) {
-                case "mouse":
-                    break;
-                case "encoder":
-                    break;
-                case "microswitch":
-                    break;
-                case "sensor":
-                    break;
-                case "brand":
-                    break;
-                case "image":
-                    break;
 
-                default:
-                    break;
-            }
+        const judgement = req.body;
+        const submissionId = judgement.submissionId;
+        if (judgement.approval) {
+
+            //Set submission to approved 2
+            pool.query(`UPDATE usersubmitteddata SET isApproved = ${2} WHERE submission_id=${submissionId}`, (err, results, fields) => {
+                if (err) {
+                    const error = {
+                        status: 501,
+                        message: err.message,
+                    };
+                    next(error);
+                }
+                if (results.affectedRows) {
+                    next();
+                }
+            });
         }
         //Set submission to unapproved 1
         else {
-            const submissionId = judgement.submissionId;
             pool.query(`UPDATE usersubmitteddata SET isApproved = ${1} WHERE submission_id=${submissionId}`, (err, results, fields) => {
-                if (err) throw err;
+                if (err) {
+                    const error = {
+                        status: 501,
+                        message: err.message,
+                    };
+                    next(error);
+                }
                 if (results.affectedRows) {
                     res.status(200).json({
                         status: 200,
@@ -65,6 +74,33 @@ const controller = {
                 }
             });
         }
+    },
+    submitSubmission: (req, res, next) => {
+        const judgement = req.body;
+        const submissionId = judgement.submissionId;
+
+        pool.query(`SELECT * FROM usersubmitteddata WHERE submission_id=${submissionId}`, (err, results, fields) => {
+            if (results.length) {
+                //console.log(results);
+                const { data, type } = results[0];
+                const object = JSON.parse(data);
+
+                pool.query(`INSERT INTO ${type} SET ?`, object, (err, results, fields) => {
+                    if (err) {
+                        const error = {
+                            status: 501,
+                            message: err.message,
+                        };
+                        next(error);
+                    } else {
+                        res.status(401).json({
+                            status: 401,
+                            message: "Submission posted to database"
+                        });
+                    }
+                });
+            }
+        });
     }
 }
 
