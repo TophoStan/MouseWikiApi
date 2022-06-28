@@ -54,10 +54,12 @@ const controller = {
           }
           i++;
         });
-        res.status(200).json({
-          status: 200,
+        res.set({
           'Content-Type': 'application/json',
           'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
+        })
+        res.status(200).json({
+          status: 200,
           result: mice,
         });
       } else {
