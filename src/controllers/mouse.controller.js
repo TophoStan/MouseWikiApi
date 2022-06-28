@@ -57,6 +57,7 @@ const controller = {
         res.set({
           'Content-Type': 'application/json',
           'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
+          'X-Total-Count': `${minRange}-${maxRange}/${totalResults}`,
         })
         res.status(200).json({
           status: 200,
