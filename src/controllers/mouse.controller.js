@@ -63,7 +63,7 @@ const controller = {
 
         res.status(200).json({
           status: 200,
-          result: mice,
+          data: mice,
         });
       } else {
         res.status(401).json({
