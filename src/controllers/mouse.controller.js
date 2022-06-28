@@ -62,8 +62,8 @@ const controller = {
         })
 
         res.status(200).json({
-          status: 200,
-          data: mice,
+          data: { mice },
+          total: totalResults,
         });
       } else {
         res.status(401).json({
