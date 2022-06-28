@@ -12,10 +12,10 @@ const controller = {
       }
       const totalResults = result.length;
       const range = req.query.range.replace("[", "").replace("]", "").split(",");
-      const minRange = range[0];
-      const maxRange = range[1];
+      const minRange = range[0] || 0;
+      const maxRange = range[1] || 0;
       let mice = [];
-      const i = 0;
+      let i = 0;
       result.forEach((data) => {
 
         let mouse = {
