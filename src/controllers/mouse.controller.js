@@ -65,7 +65,6 @@ const controller = {
 
         res.status(200).json({
           data,
-          total: totalResults,
         });
       } else {
         res.status(401).json({
