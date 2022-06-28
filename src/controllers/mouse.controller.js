@@ -55,10 +55,12 @@ const controller = {
           i++;
         });
         res.set({
+          'Access-Control-Expose-Headers': ' Content-Range',
           'Content-Type': 'application/json',
           'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
           'X-Total-Count': `${minRange}-${maxRange}/${totalResults}`,
         })
+
         res.status(200).json({
           status: 200,
           result: mice,
