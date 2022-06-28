@@ -10,47 +10,49 @@ const controller = {
         };
         next(error);
       }
+
       if (result) {
         const totalResults = result.length || 0;
         const range = req.query.range.replace("[", "").replace("]", "").split(",");
         const minRange = range[0] || 0;
+
         const maxRange = range[1] || 0;
-        let mice = [];
+        let data = [];
         let i = 0;
-        result.forEach((data) => {
+        result.forEach((dbdata) => {
 
           let mouse = {
-            id: data.mouse_id,
-            name: data.mouseName,
-            msrp: data.msrp,
-            polling_rate: data.polling_rate,
-            weight: data.weight,
-            shape: data.shape,
-            mouse_brand: data.mouse_brand,
+            id: dbdata.mouse_id,
+            name: dbdata.mouseName,
+            msrp: dbdata.msrp,
+            polling_rate: dbdata.polling_rate,
+            weight: dbdata.weight,
+            shape: dbdata.shape,
+            mouse_brand: dbdata.mouse_brand,
             sensor: {
-              id: data.sensor_id,
-              brand: data.sensorBrand,
-              name: data.sensorName,
-              lens: data.lens,
+              id: dbdata.sensor_id,
+              brand: dbdata.sensorBrand,
+              name: dbdata.sensorName,
+              lens: dbdata.lens,
             },
             encoder: {
-              name: data.encoderBrand,
-              brand: data.encoderName,
-              height: data.height,
+              name: dbdata.encoderBrand,
+              brand: dbdata.encoderName,
+              height: dbdata.height,
             },
             main_switch: {
-              switch_brand: data.switchBrand,
-              name: data.switchName,
+              switch_brand: dbdata.switchBrand,
+              name: dbdata.switchName,
             },
             side_switch: {
-              switch_brand: data.sideSwitchBrand,
-              name: data.sideSwitchName,
+              switch_brand: dbdata.sideSwitchBrand,
+              name: dbdata.sideSwitchName,
             },
-            image_item_name: data.itemname,
-            mouse_picture_url: data.image_url,
+            image_item_name: dbdata.itemname,
+            mouse_picture_url: dbdata.image_url,
           };
           if (i >= minRange && i <= maxRange) {
-            mice.push(mouse);
+            data.push(mouse);
           }
           i++;
         });
@@ -62,8 +64,8 @@ const controller = {
         })
 
         res.status(200).json({
-          data: mice,
           total: totalResults,
+          data
         });
       } else {
         res.status(401).json({
