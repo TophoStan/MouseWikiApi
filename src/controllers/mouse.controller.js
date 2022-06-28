@@ -20,7 +20,7 @@ const controller = {
         result.forEach((data) => {
 
           let mouse = {
-            mouse_id: data.mouse_id,
+            id: data.mouse_id,
             name: data.mouseName,
             msrp: data.msrp,
             polling_rate: data.polling_rate,
@@ -62,7 +62,7 @@ const controller = {
         })
 
         res.status(200).json({
-          data: { mice },
+          data: mice,
           total: totalResults,
         });
       } else {
