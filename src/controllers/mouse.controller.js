@@ -59,13 +59,13 @@ const controller = {
         res.set({
           'Access-Control-Expose-Headers': ' Content-Range',
           'Content-Type': 'application/json',
-          'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
-          'X-Total-Count': `${minRange}-${maxRange}/${totalResults}`,
+          'Content-Range': `posts ${minRange}-${maxRange}/${totalResults}`,
+          'X-Total-Count': `posts ${minRange}-${maxRange}/${totalResults}`,
         })
 
         res.status(200).json({
+          data,
           total: totalResults,
-          data
         });
       } else {
         res.status(401).json({
