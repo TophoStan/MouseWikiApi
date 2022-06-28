@@ -10,56 +10,62 @@ const controller = {
         };
         next(error);
       }
-      const totalResults = result.length;
-      const range = req.query.range.replace("[", "").replace("]", "").split(",");
-      const minRange = range[0] || 0;
-      const maxRange = range[1] || 0;
-      let mice = [];
-      let i = 0;
-      result.forEach((data) => {
+      if (result) {
+        const totalResults = result.length || 0;
+        const range = req.query.range.replace("[", "").replace("]", "").split(",");
+        const minRange = range[0] || 0;
+        const maxRange = range[1] || 0;
+        let mice = [];
+        let i = 0;
+        result.forEach((data) => {
 
-        let mouse = {
-          mouse_id: data.mouse_id,
-          name: data.mouseName,
-          msrp: data.msrp,
-          polling_rate: data.polling_rate,
-          weight: data.weight,
-          shape: data.shape,
-          mouse_brand: data.mouse_brand,
-          sensor: {
-            id: data.sensor_id,
-            brand: data.sensorBrand,
-            name: data.sensorName,
-            lens: data.lens,
-          },
-          encoder: {
-            name: data.encoderBrand,
-            brand: data.encoderName,
-            height: data.height,
-          },
-          main_switch: {
-            switch_brand: data.switchBrand,
-            name: data.switchName,
-          },
-          side_switch: {
-            switch_brand: data.sideSwitchBrand,
-            name: data.sideSwitchName,
-          },
-          image_item_name: data.itemname,
-          mouse_picture_url: data.image_url,
-        };
-        if (i >= minRange && i <= maxRange) {
-          mice.push(mouse);
-        }
-        i++;
-      });
-
-      res.status(200).json({
-        status: 200,
-        'Content-Type': 'application/json',
-        'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
-        result: mice,
-      });
+          let mouse = {
+            mouse_id: data.mouse_id,
+            name: data.mouseName,
+            msrp: data.msrp,
+            polling_rate: data.polling_rate,
+            weight: data.weight,
+            shape: data.shape,
+            mouse_brand: data.mouse_brand,
+            sensor: {
+              id: data.sensor_id,
+              brand: data.sensorBrand,
+              name: data.sensorName,
+              lens: data.lens,
+            },
+            encoder: {
+              name: data.encoderBrand,
+              brand: data.encoderName,
+              height: data.height,
+            },
+            main_switch: {
+              switch_brand: data.switchBrand,
+              name: data.switchName,
+            },
+            side_switch: {
+              switch_brand: data.sideSwitchBrand,
+              name: data.sideSwitchName,
+            },
+            image_item_name: data.itemname,
+            mouse_picture_url: data.image_url,
+          };
+          if (i >= minRange && i <= maxRange) {
+            mice.push(mouse);
+          }
+          i++;
+        });
+        res.status(200).json({
+          status: 200,
+          'Content-Type': 'application/json',
+          'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
+          result: mice,
+        });
+      } else {
+        res.status(401).json({
+          status: 401,
+          message: "Was not able to fetch mice",
+        });
+      }
     });
   },
   getMiceById: (req, res, next) => {
