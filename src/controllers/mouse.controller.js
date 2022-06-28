@@ -63,9 +63,8 @@ const controller = {
           'X-Total-Count': `posts ${minRange}-${maxRange}/${totalResults}`,
         })
 
-        res.status(200).json({
-          data,
-        });
+        res.status(200).json(data,
+        );
       } else {
         res.status(401).json({
           status: 401,
