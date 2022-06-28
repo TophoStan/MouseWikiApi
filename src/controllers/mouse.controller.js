@@ -2,7 +2,7 @@ const { pool } = require("../database/databaseconfig");
 
 const controller = {
   getAllMice: (req, res, next) => {
-    pool.query("SELECT * FROM mousejoinquery;", (err, result, fields) => {
+    pool.query(`SELECT * FROM mousejoinquery;`, (err, result, fields) => {
       if (err) {
         const error = {
           status: 501,
@@ -10,9 +10,14 @@ const controller = {
         };
         next(error);
       }
+      const totalResults = result.length;
+      const range = req.query.range.replace("[", "").replace("]", "").split(",");
+      const minRange = range[0];
+      const maxRange = range[1];
       let mice = [];
-      console.log(result);
+      const i = 0;
       result.forEach((data) => {
+
         let mouse = {
           mouse_id: data.mouse_id,
           name: data.mouseName,
@@ -43,11 +48,16 @@ const controller = {
           image_item_name: data.itemname,
           mouse_picture_url: data.image_url,
         };
-        mice.push(mouse);
+        if (i >= minRange && i <= maxRange) {
+          mice.push(mouse);
+        }
+        i++;
       });
 
       res.status(200).json({
         status: 200,
+        'Content-Type': 'application/json',
+        'Content-Range': `${minRange}-${maxRange}/${totalResults}`,
         result: mice,
       });
     });
