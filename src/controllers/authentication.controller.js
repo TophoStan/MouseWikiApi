@@ -3,61 +3,47 @@ const { pool } = require("../database/databaseconfig");
 const jwt = require("jsonwebtoken");
 require("dotenv");
 const bcrypt = require("bcryptjs");
+const User = require("../models/User")
 
 const jwtSecretKey = process.env.JWTSECRET;
 const controller = {
-    login(req, res, next) {
-        //Look if user exists
-        pool.query(
-            "SELECT id, username, password FROM users WHERE emailAddress = ?",
-            [req.body.emailAddress],
-            async (err, dbresults, fields) => {
-                if (err) {
-                    res.status(500).json({
-                        status: 500,
-                        message: err.message,
-                    });
-                }
-                if (dbresults.length) {
-                    //If user does exist
-                    const match = await bcrypt.compare(
-                        req.body.password,
-                        dbresults[0].password
-                    );
-
-                    if (match) {
-                        // Extract the password from the userdata - we do not send that in the response.
-                        const { password, ...userinfo } = dbresults[0];
-                        // Create an object containing the data we want in the payload.
-                        const payload = {
-                            userId: userinfo.id,
-                        };
-
-                        jwt.sign(
-                            payload,
-                            jwtSecretKey,
-                            { expiresIn: "12d" },
-                            function (err, token) {
-                                res.status(200).json({
-                                    status: 200,
-                                    results: { ...userinfo, token },
-                                });
-                            }
-                        );
-                    } else {
-                        res.status(404).json({
-                            status: 404,
-                            message: "User not found or password invalid",
+    login: async (req, res, next) => {
+        const findUsers = await User.findAll({ where: { emailAddress: req.body.emailAddress } })
+        if (findUsers.length) {
+            const match = await bcrypt.compare(
+                req.body.password,
+                findUsers[0].password
+            );
+            if (match) {
+                const userinfo = findUsers[0];
+                // Create an object containing the data we want in the payload.
+                const payload = {
+                    userId: userinfo.id,
+                };
+                const { password, createdAt, updatedAt, isAdmin, ...userData } = userinfo.dataValues;
+                jwt.sign(
+                    payload,
+                    jwtSecretKey,
+                    { expiresIn: "12d" },
+                    function (err, token) {
+                        res.status(200).json({
+                            status: 200,
+                            results: { ...userData, auth: token },
                         });
-                    }
-                } else {
-                    res.status(404).json({
-                        status: 404,
-                        message: "User not found with provided email",
-                    });
-                }
+                    })
+            } else {
+                res.status(404).json({
+                    status: 404,
+                    message: "User not found or password invalid",
+                });
             }
-        );
+        } else {
+            res.status(404).json({
+                status: 404,
+                message: "User not found or password invalid",
+            });
+        }
+
     },
     validateLogin(req, res, next) {
         // Verify that we receive the expected input
@@ -104,22 +90,61 @@ const controller = {
             });
         }
     },
-    validateAdmin(req, res, next) {
+    validateAdmin: async (req, res, next) => {
         const tokenString = req.headers.authorization.split(" ");
         const token = tokenString[1];
         const payload = jwt.decode(token);
         const userId = payload.userId;
-        pool.query(`SELECT * FROM users WHERE Id=${userId} AND isAdmin = 1`, (err, results, fields) => {
-            if (results.length) {
-                next();
-            } else {
-                const error = {
-                    status: 404,
-                    message: "Not an admin"
-                }
-                next(error);
+
+        const user = await User.findByPk(userId, { where: { isAdmin: 1 } });
+        if (user.isAdmin) {
+            next();
+        } else {
+            const error = {
+                status: 404,
+                message: "Not an admin"
             }
-        })
+            next(error);
+        }
+    },
+    loginAsAdmin: async (req, res, next) => {
+        const findUsers = await User.findAll({ where: { emailAddress: req.body.emailAddress } })
+        if (findUsers.length) {
+            const match = await bcrypt.compare(
+                req.body.password,
+                findUsers[0].password
+            );
+            if (match && findUsers[0].isAdmin) {
+                console.log(findUsers[0].isAdmin);
+                const userinfo = findUsers[0];
+
+                // Create an object containing the data we want in the payload.
+                const payload = {
+                    userId: userinfo.id,
+                };
+                const { password, createdAt, updatedAt, isAdmin, ...userData } = userinfo.dataValues;
+                jwt.sign(
+                    payload,
+                    jwtSecretKey,
+                    { expiresIn: "12d" },
+                    function (err, token) {
+                        res.status(200).json({
+                            status: 200,
+                            results: { ...userData, auth: token },
+                        });
+                    })
+            } else {
+                res.status(404).json({
+                    status: 404,
+                    message: "User not found or password invalid",
+                });
+            }
+        } else {
+            res.status(404).json({
+                status: 404,
+                message: "User not found or password invalid",
+            });
+        }
     }
 }
 module.exports = controller;

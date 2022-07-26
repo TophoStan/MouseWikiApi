@@ -3,7 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT;
@@ -29,6 +28,8 @@ app.get("/", (req, res) => {
   });
 });
 
+
+
 const userRoute = require("./src/routes/User");
 const miceRoute = require("./src/routes/Mice");
 const switchRoute = require("./src/routes/Switch");
@@ -49,6 +50,68 @@ app.use("/api/submit", submissionRoute);
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDoc = require("./src/routes/SwaggerDocument.json");
+const Encoder = require("./src/models/Encoder");
+const Brand = require("./src/models/Brand");
+const Sensor = require("./src/models/Sensor");
+const MicroSwitch = require("./src/models/Switch");
+const ItemImage = require("./src/models/Image");
+const Mouse = require("./src/models/Mouse");
+
+//Relationships
+function initRelationShips() {
+  //Encoder
+  Encoder.belongsTo(Brand);
+  Brand.hasMany(Encoder);
+
+  //Sensor
+  Sensor.belongsTo(Brand);
+  Brand.hasMany(Sensor);
+
+  //Microswitch
+  MicroSwitch.belongsTo(Brand);
+  Brand.hasMany(MicroSwitch);
+
+  //Mouse
+  Brand.hasMany(Mouse);
+  Mouse.belongsTo(Brand);
+
+  //Main mouse switch
+  Mouse.belongsTo(MicroSwitch, {
+    foreignKey: "main_switch_id"
+  });
+  MicroSwitch.hasMany(Mouse, {
+    foreignKey: "main_switch_id"
+  });
+
+  //Main mouse switch
+  Mouse.belongsTo(MicroSwitch, {
+    foreignKey: "side_switch_id"
+  });
+  MicroSwitch.hasMany(Mouse, {
+    foreignKey: "side_switch_id"
+  });
+
+
+  Mouse.belongsTo(Sensor);
+  Sensor.hasMany(Mouse);
+
+  Mouse.belongsTo(Encoder);
+  Encoder.hasMany(Mouse);
+
+
+}
+initRelationShips();
+
+//Sync
+async function SyncModels() {
+  await Encoder.sync({ alter: true });
+  await Brand.sync({ alter: true });
+  await Sensor.sync({ alter: true });
+  await MicroSwitch.sync({ alter: true });
+  await ItemImage.sync({ alter: true });
+  await Mouse.sync({ alter: true });
+}
+SyncModels();
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
@@ -62,7 +125,6 @@ app.all("*", (req, res) => {
 app.use((err, req, res, next) => {
   res.status(err.status).json(err);
 });
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

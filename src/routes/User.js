@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/register", validationController.validateUser, userController.registerUser);
 router.post("/login", authController.validateLogin, authController.login);
-router.get("/:id", authController.validateToken, userController.getUserById);
+router.post("/login-admin", authController.validateLogin, authController.loginAsAdmin)
 
 
 
